@@ -4,8 +4,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
-import sentosa.sentosaspringserver.common.exception.CustomException;
-import sentosa.sentosaspringserver.common.exception.ErrorCode;
+import sentosa.sentosaspringserver.global.exception.CustomException;
+import sentosa.sentosaspringserver.global.exception.ErrorCode;
 import sentosa.sentosaspringserver.domain.partner.dao.PartnerJpaRepository;
 import sentosa.sentosaspringserver.domain.partner.dto.PartnerAdminRequestDto;
 import sentosa.sentosaspringserver.domain.partner.dto.PartnerAdminResponseDto;

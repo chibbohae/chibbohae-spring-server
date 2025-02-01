@@ -1,4 +1,4 @@
-package sentosa.sentosaspringserver.common.exception;
+package sentosa.sentosaspringserver.global.exception;
 
 import lombok.Getter;
 

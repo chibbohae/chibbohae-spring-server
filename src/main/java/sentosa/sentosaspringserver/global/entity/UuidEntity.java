@@ -1,4 +1,4 @@
-package sentosa.sentosaspringserver.common.entity;
+package sentosa.sentosaspringserver.global.entity;
 
 import java.util.UUID;
 

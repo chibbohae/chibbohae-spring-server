@@ -1,6 +1,6 @@
 package sentosa.sentosaspringserver.domain.partner.dto;
 
-import sentosa.sentosaspringserver.common.entity.Gender;
+import sentosa.sentosaspringserver.global.entity.Gender;
 import sentosa.sentosaspringserver.domain.partner.entity.Partner;
 
 public record PartnerAdminResponseDto(

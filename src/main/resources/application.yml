@@ -1,5 +1,6 @@
 spring:
   config:
     import:
-      - database.yml
-      - application-secret.yml
+      - optional:database.yml
+      - optional:application-secret.yml
+

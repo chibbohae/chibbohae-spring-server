@@ -5,7 +5,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
-import sentosa.sentosaspringserver.common.entity.Gender;
+import sentosa.sentosaspringserver.global.entity.Gender;
 
 public record PartnerAdminRequestDto(
 	@NotBlank(message = "Login ID는 필수입니다.")

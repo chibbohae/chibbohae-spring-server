@@ -1,4 +1,4 @@
-package sentosa.sentosaspringserver.common.entity;
+package sentosa.sentosaspringserver.global.entity;
 
 public enum Gender {
 	M("Male"),    // 남성

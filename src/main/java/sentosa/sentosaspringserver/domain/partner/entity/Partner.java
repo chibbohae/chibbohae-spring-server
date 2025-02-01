@@ -18,8 +18,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import sentosa.sentosaspringserver.common.entity.Gender;
-import sentosa.sentosaspringserver.common.entity.UuidEntity;
+import sentosa.sentosaspringserver.global.entity.Gender;
+import sentosa.sentosaspringserver.global.entity.UuidEntity;
 
 @Entity
 @Getter
