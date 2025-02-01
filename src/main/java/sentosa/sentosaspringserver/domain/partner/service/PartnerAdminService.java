@@ -25,9 +25,6 @@ public class PartnerAdminService {
 
 		// Partner 엔티티 생성
 		Partner partner = Partner.builder()
-			.loginId(requestDto.loginId())
-			.loginPassword(requestDto.loginPassword()) // TODO: 비밀번호 암호화 필요
-			.name(requestDto.name())
 			.age(requestDto.age())
 			.gender(requestDto.gender())
 			.telephone(requestDto.telephone())
