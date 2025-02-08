@@ -9,7 +9,5 @@ import sentosa.sentosaspringserver.domain.partner.entity.Partner;
 
 @Repository
 public interface PartnerJpaRepository extends JpaRepository<Partner, Long> {
-	boolean existsByLoginId(String loginId);
-
 	Optional<Partner> findByLoginId(String loginId);
 }

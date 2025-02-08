@@ -8,8 +8,6 @@ import org.springframework.stereotype.Repository;
 import sentosa.sentosaspringserver.domain.client.entity.Client;
 
 @Repository
-public interface ClientRepository extends JpaRepository<Client, Long> {
-	boolean existsByLoginId(String loginId);
-
+public interface ClientJpaRepository extends JpaRepository<Client, Long> {
 	Optional<Client> findByLoginId(String loginId);
 }

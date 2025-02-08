@@ -21,8 +21,8 @@ public class SecurityConfig {
         http.csrf(AbstractHttpConfigurer::disable)
             .cors(c -> {})
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/api/partner/**").hasAuthority("ROLE_PARTNER")
-                .requestMatchers("/api/client/**").hasAuthority("ROLE_CLIENT")
+                .requestMatchers("/v1/partner/**").hasAuthority("ROLE_PARTNER")
+                .requestMatchers("/v1/client/**").hasAuthority("ROLE_CLIENT")
                 .anyRequest().permitAll()
             )
             .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class);

@@ -26,7 +26,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
 		if (token != null && jwtTokenProvider.validateToken(token)) {
 			String userId = jwtTokenProvider.getUserId(token);
-			String role = jwtTokenProvider.getRole(token); // ✅ 역할 가져오기 (ROLE_PARTNER or ROLE_CLIENT)
+			String role = jwtTokenProvider.getRole(token);
 
 			UserDetailsImpl userDetails = new UserDetailsImpl(userId, role);
 

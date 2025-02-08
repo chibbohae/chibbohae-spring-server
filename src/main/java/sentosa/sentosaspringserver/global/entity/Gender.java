@@ -2,8 +2,7 @@ package sentosa.sentosaspringserver.global.entity;
 
 public enum Gender {
 	M("Male"),    // 남성
-	F("Female"),  // 여성
-	O("Other");   // 기타
+	F("Female"),;  // 여성
 
 	private final String description;
 

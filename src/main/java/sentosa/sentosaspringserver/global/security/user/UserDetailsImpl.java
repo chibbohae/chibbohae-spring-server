@@ -20,7 +20,7 @@ public class UserDetailsImpl implements UserDetails {
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		return List.of(new SimpleGrantedAuthority(role)); // ✅ ROLE_PARTNER 또는 ROLE_CLIENT 설정
+		return List.of(new SimpleGrantedAuthority(role));
 	}
 
 	@Override

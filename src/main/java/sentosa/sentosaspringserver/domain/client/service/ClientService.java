@@ -6,15 +6,15 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import sentosa.sentosaspringserver.domain.client.entity.Client;
-import sentosa.sentosaspringserver.domain.client.repository.ClientRepository;
+import sentosa.sentosaspringserver.domain.client.repository.ClientJpaRepository;
 import sentosa.sentosaspringserver.global.entity.Gender;
 
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class ClientAdminService {
+public class ClientService {
 
-	private final ClientRepository clientRepository;
+	private final ClientJpaRepository clientJpaRepository;
 
 	@Transactional
 	public Client createClient(String name, Integer age, Gender gender, String telephone, String email,
@@ -32,10 +32,10 @@ public class ClientAdminService {
 			.major(major)
 			.university(university)
 			.build();
-		return clientRepository.save(client);
+		return clientJpaRepository.save(client);
 	}
 
 	public Optional<Client> findByLoginId(String loginId) {
-		return clientRepository.findByLoginId(loginId);
+		return clientJpaRepository.findByLoginId(loginId);
 	}
 }

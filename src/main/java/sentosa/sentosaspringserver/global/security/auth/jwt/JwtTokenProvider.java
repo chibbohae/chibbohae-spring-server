@@ -50,8 +50,8 @@ public class JwtTokenProvider {
 
 	public String createToken(Long userId, String username, String role, Long period) {
 		return Jwts.builder()
-			.subject(username)  // userId 대신 username 저장
-			.claim("userId", userId)  // userId를 claims에 따로 저장
+			.subject(username)
+			.claim("userId", userId)
 			.claim("roles", List.of(role))
 			.issuedAt(new Date())
 			.expiration(new Date(System.currentTimeMillis() + period * 1000))

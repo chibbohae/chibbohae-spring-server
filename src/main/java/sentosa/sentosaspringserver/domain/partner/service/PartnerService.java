@@ -13,7 +13,7 @@ import sentosa.sentosaspringserver.domain.partner.entity.Partner;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class PartnerAdminService {
+public class PartnerService {
 	private final PartnerJpaRepository partnerRepository;
 
 	@Transactional

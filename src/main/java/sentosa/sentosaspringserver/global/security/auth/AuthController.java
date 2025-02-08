@@ -1,5 +1,7 @@
 package sentosa.sentosaspringserver.global.security.auth;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import sentosa.sentosaspringserver.global.security.auth.dto.ClientLoginRequestDto;
@@ -16,29 +18,30 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/v1/auth")
 @RequiredArgsConstructor
 @Slf4j
+@Tag(name = "로그인 및 회원가입")
 public class AuthController {
 
 	private final AuthService authService;
 
-	// ✅ Partner 회원가입 API
+	@Operation(summary = "파트너 일반 회원가입")
 	@PostMapping("/partner/signup")
 	public ResponseEntity<TokenResponse> partnerSignup(@RequestBody @Validated PartnerSignupRequestDto signupRequestDto) {
 		return ResponseEntity.ok(authService.partnerSignup(signupRequestDto));
 	}
 
-	// ✅ Client 회원가입 API
+	@Operation(summary = "클라이언트 일반 회원가입")
 	@PostMapping("/client/signup")
 	public ResponseEntity<TokenResponse> clientSignup(@RequestBody @Validated ClientSignupRequestDto signupRequestDto) {
 		return ResponseEntity.ok(authService.clientSignup(signupRequestDto));
 	}
 
-	// ✅ Partner 로그인 API
+	@Operation(summary = "파트너 일반 로그인")
 	@PostMapping("/partner/login")
 	public ResponseEntity<TokenResponse> partnerLogin(@RequestBody @Validated PartnerLoginRequestDto loginRequestDto) {
 		return ResponseEntity.ok(authService.partnerLogin(loginRequestDto));
 	}
 
-	// ✅ Client 로그인 API
+	@Operation(summary = "클라이언트 일반 로그인")
 	@PostMapping("/client/login")
 	public ResponseEntity<TokenResponse> clientLogin(@RequestBody @Validated ClientLoginRequestDto loginRequestDto) {
 		return ResponseEntity.ok(authService.clientLogin(loginRequestDto));
