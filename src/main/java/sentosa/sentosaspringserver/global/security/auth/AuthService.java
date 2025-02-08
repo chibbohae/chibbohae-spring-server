@@ -42,7 +42,7 @@ public class AuthService {
 			signupRequestDto.bio()
 		);
 
-		return jwtTokenProvider.createTokenResponse(partner.getId(), "ROLE_PARTNER");
+		return jwtTokenProvider.createTokenResponse(partner.getId(), partner.getName(), "ROLE_PARTNER");
 	}
 
 	// ✅ Client 회원가입
@@ -61,7 +61,7 @@ public class AuthService {
 			signupRequestDto.university()
 		);
 
-		return jwtTokenProvider.createTokenResponse(client.getId(), "ROLE_CLIENT");
+		return jwtTokenProvider.createTokenResponse(client.getId(), client.getName(), "ROLE_CLIENT");
 	}
 
 	// ✅ Partner 로그인
@@ -74,7 +74,7 @@ public class AuthService {
 			throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
 		}
 
-		return jwtTokenProvider.createTokenResponse(partner.getId(), "ROLE_PARTNER");
+		return jwtTokenProvider.createTokenResponse(partner.getId(), partner.getName(), "ROLE_PARTNER");
 	}
 
 	// ✅ Client 로그인
@@ -87,6 +87,6 @@ public class AuthService {
 			throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
 		}
 
-		return jwtTokenProvider.createTokenResponse(client.getId(), "ROLE_CLIENT");
+		return jwtTokenProvider.createTokenResponse(client.getId(), client.getName(), "ROLE_CLIENT");
 	}
 }

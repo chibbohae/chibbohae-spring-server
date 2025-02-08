@@ -1,11 +1,15 @@
 package sentosa.sentosaspringserver.global.security.auth.jwt;
 
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.JwtParser;
+import io.jsonwebtoken.MalformedJwtException;
+import io.jsonwebtoken.UnsupportedJwtException;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
+import lombok.extern.slf4j.Slf4j;
 import sentosa.sentosaspringserver.global.security.auth.dto.TokenResponse;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -17,6 +21,7 @@ import java.util.Date;
 import java.util.List;
 
 @Component
+@Slf4j
 public class JwtTokenProvider {
 
 	@Value("${jwt.secret}")
@@ -36,18 +41,18 @@ public class JwtTokenProvider {
 			.build();
 	}
 
-	// ✅ Partner & Client 구분하여 토큰 생성
-	public TokenResponse createTokenResponse(Long userId, String role) {
+	public TokenResponse createTokenResponse(Long userId, String username, String role) {
 		return new TokenResponse(
-			createToken(userId, role, ACCESS_TOKEN_VALIDITY_SECONDS),
-			createToken(userId, role, REFRESH_TOKEN_VALIDITY_SECONDS)
+			createToken(userId, username, role, ACCESS_TOKEN_VALIDITY_SECONDS),
+			createToken(userId, username, role, REFRESH_TOKEN_VALIDITY_SECONDS)
 		);
 	}
 
-	public String createToken(Long userId, String role, Long period) {
+	public String createToken(Long userId, String username, String role, Long period) {
 		return Jwts.builder()
-			.subject(String.valueOf(userId))
-			.claim("role", role)  // ✅ 역할 저장 (ROLE_PARTNER 또는 ROLE_CLIENT)
+			.subject(username)  // userId 대신 username 저장
+			.claim("userId", userId)  // userId를 claims에 따로 저장
+			.claim("roles", List.of(role))
 			.issuedAt(new Date())
 			.expiration(new Date(System.currentTimeMillis() + period * 1000))
 			.signWith(key)
@@ -60,19 +65,26 @@ public class JwtTokenProvider {
 	}
 
 	public String getRole(String token) {
-		return extractAllClaims(token).get("role", String.class); // ✅ "roles" → "role" 수정
+		return extractAllClaims(token).get("role", String.class);
 	}
 
 	public String getUserId(String token) {
-		return extractAllClaims(token).getSubject();
+		return extractAllClaims(token).get("userId", String.class);
 	}
 
 	public boolean validateToken(String token) {
 		try {
 			extractAllClaims(token);
 			return true;
+		} catch (ExpiredJwtException e) {
+			log.warn("Expired JWT token: {}", e.getMessage());
+		} catch (UnsupportedJwtException e) {
+			log.warn("Unsupported JWT token: {}", e.getMessage());
+		} catch (MalformedJwtException e) {
+			log.warn("Invalid JWT token: {}", e.getMessage());
 		} catch (Exception e) {
-			return false;
+			log.warn("JWT validation failed: {}", e.getMessage());
 		}
+		return false;
 	}
 }

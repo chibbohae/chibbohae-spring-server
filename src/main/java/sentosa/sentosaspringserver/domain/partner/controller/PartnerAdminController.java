@@ -20,13 +20,4 @@ import sentosa.sentosaspringserver.domain.partner.service.PartnerAdminService;
 @RequiredArgsConstructor
 public class PartnerAdminController {
 	private final PartnerAdminService partnerService;
-
-	@Operation(summary = "파트너 생성")
-	@PostMapping
-	public ResponseEntity<PartnerResponseDto> createPartner(
-		@RequestBody @Valid PartnerRequestDto partnerAdminRequestDto
-	) {
-		PartnerResponseDto responseDto = partnerService.createPartner(partnerAdminRequestDto);
-		return ResponseEntity.ok(responseDto);
-	}
 }
