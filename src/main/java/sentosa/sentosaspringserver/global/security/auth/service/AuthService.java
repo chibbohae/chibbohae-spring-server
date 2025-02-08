@@ -1,15 +1,15 @@
-package sentosa.sentosaspringserver.global.security.auth;
+package sentosa.sentosaspringserver.global.security.auth.service;
 
 import lombok.RequiredArgsConstructor;
 import sentosa.sentosaspringserver.domain.client.entity.Client;
 import sentosa.sentosaspringserver.domain.client.service.ClientService;
 import sentosa.sentosaspringserver.domain.partner.entity.Partner;
 import sentosa.sentosaspringserver.domain.partner.service.PartnerService;
-import sentosa.sentosaspringserver.global.security.auth.dto.ClientLoginRequestDto;
-import sentosa.sentosaspringserver.global.security.auth.dto.ClientSignupRequestDto;
-import sentosa.sentosaspringserver.global.security.auth.dto.PartnerLoginRequestDto;
-import sentosa.sentosaspringserver.global.security.auth.dto.PartnerSignupRequestDto;
-import sentosa.sentosaspringserver.global.security.auth.dto.TokenResponse;
+import sentosa.sentosaspringserver.global.security.auth.dto.request.ClientLoginRequestDto;
+import sentosa.sentosaspringserver.global.security.auth.dto.request.ClientSignupRequestDto;
+import sentosa.sentosaspringserver.global.security.auth.dto.request.PartnerLoginRequestDto;
+import sentosa.sentosaspringserver.global.security.auth.dto.request.PartnerSignupRequestDto;
+import sentosa.sentosaspringserver.global.security.auth.dto.response.TokenResponse;
 import sentosa.sentosaspringserver.global.security.auth.jwt.JwtTokenProvider;
 
 import org.springframework.security.crypto.password.PasswordEncoder;

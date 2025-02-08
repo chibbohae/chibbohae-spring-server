@@ -1,8 +1,8 @@
-package sentosa.sentosaspringserver.global.security.auth.dto;
+package sentosa.sentosaspringserver.global.security.auth.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
 
-public record ClientLoginRequestDto(
+public record PartnerLoginRequestDto(
 	@NotBlank String loginId,
 	@NotBlank String loginPassword
 ) {}

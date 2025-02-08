@@ -10,4 +10,5 @@ import sentosa.sentosaspringserver.domain.client.entity.Client;
 @Repository
 public interface ClientJpaRepository extends JpaRepository<Client, Long> {
 	Optional<Client> findByLoginId(String loginId);
+	Optional<Client> findByEmail(String email);
 }

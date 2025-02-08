@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Kakao Login</title>
+</head>
+<body>
+<div class="container" style="display: flex; flex-direction: column; align-items: center; margin: 200px auto;">
+    <h1>카카오 로그인</h1>
+    <h2>파트너 로그인</h2>
+    <a th:href="${partnerLoginUrl}" style="margin-bottom: 20px;">
+        <img src="/kakao_login_medium_narrow.png" alt="파트너 로그인">
+    </a>
+
+    <h2>클라이언트 로그인</h2>
+    <a th:href="${clientLoginUrl}">
+        <img src="/kakao_login_medium_narrow.png" alt="클라이언트 로그인">
+    </a>
+</div>
+</body>
+</html>

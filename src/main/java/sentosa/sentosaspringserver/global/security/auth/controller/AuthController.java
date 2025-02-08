@@ -1,14 +1,15 @@
-package sentosa.sentosaspringserver.global.security.auth;
+package sentosa.sentosaspringserver.global.security.auth.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import sentosa.sentosaspringserver.global.security.auth.dto.ClientLoginRequestDto;
-import sentosa.sentosaspringserver.global.security.auth.dto.ClientSignupRequestDto;
-import sentosa.sentosaspringserver.global.security.auth.dto.PartnerLoginRequestDto;
-import sentosa.sentosaspringserver.global.security.auth.dto.PartnerSignupRequestDto;
-import sentosa.sentosaspringserver.global.security.auth.dto.TokenResponse;
+import sentosa.sentosaspringserver.global.security.auth.service.AuthService;
+import sentosa.sentosaspringserver.global.security.auth.dto.request.ClientLoginRequestDto;
+import sentosa.sentosaspringserver.global.security.auth.dto.request.ClientSignupRequestDto;
+import sentosa.sentosaspringserver.global.security.auth.dto.request.PartnerLoginRequestDto;
+import sentosa.sentosaspringserver.global.security.auth.dto.request.PartnerSignupRequestDto;
+import sentosa.sentosaspringserver.global.security.auth.dto.response.TokenResponse;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;

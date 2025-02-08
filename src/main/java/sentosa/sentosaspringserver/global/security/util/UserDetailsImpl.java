@@ -1,4 +1,4 @@
-package sentosa.sentosaspringserver.global.security.user;
+package sentosa.sentosaspringserver.global.security.util;
 
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;

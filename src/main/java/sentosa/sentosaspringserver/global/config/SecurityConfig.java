@@ -1,4 +1,4 @@
-package sentosa.sentosaspringserver.global.security;
+package sentosa.sentosaspringserver.global.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,13 +16,20 @@ import sentosa.sentosaspringserver.global.security.auth.jwt.JwtTokenProvider;
 @EnableMethodSecurity(securedEnabled = true)
 public class SecurityConfig {
 
+    private final JwtTokenProvider jwtTokenProvider;
+
+    public SecurityConfig(JwtTokenProvider jwtTokenProvider) {
+        this.jwtTokenProvider = jwtTokenProvider;
+    }
+
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http, JwtTokenProvider jwtTokenProvider) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable)
-            .cors(c -> {})
+            .cors(cors -> {}) // 기본 CORS 설정 유지
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/v1/partner/**").hasAuthority("ROLE_PARTNER")
                 .requestMatchers("/v1/client/**").hasAuthority("ROLE_CLIENT")
+                .requestMatchers("/v1/auth/kakao/**").permitAll()
                 .anyRequest().permitAll()
             )
             .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class);

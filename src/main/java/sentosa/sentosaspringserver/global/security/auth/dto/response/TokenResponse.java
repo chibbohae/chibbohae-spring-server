@@ -1,4 +1,4 @@
-package sentosa.sentosaspringserver.global.security.auth.dto;
+package sentosa.sentosaspringserver.global.security.auth.dto.response;
 
 import lombok.Builder;
 
