@@ -10,8 +10,8 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import sentosa.sentosaspringserver.domain.partner.dto.PartnerAdminRequestDto;
-import sentosa.sentosaspringserver.domain.partner.dto.PartnerAdminResponseDto;
+import sentosa.sentosaspringserver.domain.partner.dto.PartnerRequestDto;
+import sentosa.sentosaspringserver.domain.partner.dto.PartnerResponseDto;
 import sentosa.sentosaspringserver.domain.partner.service.PartnerAdminService;
 
 @Tag(name = "파트너 (Partner)", description = "파트너 CRUD API")
@@ -23,12 +23,10 @@ public class PartnerAdminController {
 
 	@Operation(summary = "파트너 생성")
 	@PostMapping
-	public ResponseEntity<PartnerAdminResponseDto> createPartner(
-		@RequestBody @Valid PartnerAdminRequestDto partnerAdminRequestDto
+	public ResponseEntity<PartnerResponseDto> createPartner(
+		@RequestBody @Valid PartnerRequestDto partnerAdminRequestDto
 	) {
-		PartnerAdminResponseDto responseDto = partnerService.createPartner(partnerAdminRequestDto);
+		PartnerResponseDto responseDto = partnerService.createPartner(partnerAdminRequestDto);
 		return ResponseEntity.ok(responseDto);
 	}
-
-
 }

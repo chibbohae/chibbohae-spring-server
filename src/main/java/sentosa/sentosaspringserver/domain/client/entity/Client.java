@@ -6,9 +6,11 @@ import org.hibernate.annotations.Where;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import sentosa.sentosaspringserver.global.entity.BaseEntity;
+import sentosa.sentosaspringserver.global.entity.Gender;
 
 @Entity
 @Getter
@@ -24,4 +26,12 @@ public class Client extends BaseEntity {
 
 	@Column
 	private String university;
+
+	@Builder
+	public Client(String name, Integer age, Gender gender, String telephone, String email, String loginId, String loginPassword, String interest, String major, String university) {
+		super(name, age, gender, telephone, email, loginId, loginPassword);
+		this.interest = interest;
+		this.major = major;
+		this.university = university;
+	}
 }

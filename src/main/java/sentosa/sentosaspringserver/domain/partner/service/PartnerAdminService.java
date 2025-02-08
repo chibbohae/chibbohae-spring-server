@@ -1,43 +1,42 @@
 package sentosa.sentosaspringserver.domain.partner.service;
 
+import java.util.Optional;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
-import sentosa.sentosaspringserver.global.exception.CustomException;
-import sentosa.sentosaspringserver.global.exception.ErrorCode;
-import sentosa.sentosaspringserver.domain.partner.dao.PartnerJpaRepository;
-import sentosa.sentosaspringserver.domain.partner.dto.PartnerAdminRequestDto;
-import sentosa.sentosaspringserver.domain.partner.dto.PartnerAdminResponseDto;
+import sentosa.sentosaspringserver.global.entity.Gender;
+import sentosa.sentosaspringserver.domain.partner.repository.PartnerJpaRepository;
 import sentosa.sentosaspringserver.domain.partner.entity.Partner;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class PartnerAdminService {
 	private final PartnerJpaRepository partnerRepository;
 
 	@Transactional
-	public PartnerAdminResponseDto createPartner(PartnerAdminRequestDto requestDto) {
-		// 중복된 LoginId 검증
-		if (partnerRepository.existsByLoginId(requestDto.loginId())) {
-			throw new CustomException(ErrorCode.DUPLICATE_LOGIN_ID);
-		}
-
-		// Partner 엔티티 생성
+	public Partner createPartner(String name, Integer age, Gender gender, String telephone, String email,
+		String loginId, String loginPassword, String company, Integer yearsOfExperience,
+		String position, String bio) {
 		Partner partner = Partner.builder()
-			.age(requestDto.age())
-			.gender(requestDto.gender())
-			.telephone(requestDto.telephone())
-			.company(requestDto.company())
-			.yearsOfExperience(requestDto.yearsOfExperience())
-			.position(requestDto.position())
-			.bio(requestDto.bio())
+			.name(name)
+			.age(age)
+			.gender(gender)
+			.telephone(telephone)
+			.email(email)
+			.loginId(loginId)
+			.loginPassword(loginPassword)
+			.company(company)
+			.yearsOfExperience(yearsOfExperience)
+			.position(position)
+			.bio(bio)
 			.build();
+		return partnerRepository.save(partner);
+	}
 
-		// 엔티티 저장
-		Partner savedPartner = partnerRepository.save(partner);
-
-		// 응답 DTO 반환
-		return new PartnerAdminResponseDto(savedPartner);
+	public Optional<Partner> findByLoginId(String loginId) {
+		return partnerRepository.findByLoginId(loginId);
 	}
 }
