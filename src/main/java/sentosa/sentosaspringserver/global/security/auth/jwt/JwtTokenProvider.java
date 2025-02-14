@@ -50,8 +50,7 @@ public class JwtTokenProvider {
 
 	public String createToken(Long userId, String username, String role, Long period) {
 		return Jwts.builder()
-			.subject(username)
-			.claim("userId", userId)
+			.subject(String.valueOf(userId))
 			.claim("roles", List.of(role))
 			.issuedAt(new Date())
 			.expiration(new Date(System.currentTimeMillis() + period * 1000))
@@ -64,12 +63,16 @@ public class JwtTokenProvider {
 			.getPayload();
 	}
 
+	public String getUsername(String token) {
+		return extractAllClaims(token).get("userName", String.class);
+	}
+
 	public String getRole(String token) {
-		return extractAllClaims(token).get("role", String.class);
+		return extractAllClaims(token).get("roles", List.class).get(0).toString();
 	}
 
 	public String getUserId(String token) {
-		return extractAllClaims(token).get("userId", String.class);
+		return extractAllClaims(token).getSubject();
 	}
 
 	public boolean validateToken(String token) {

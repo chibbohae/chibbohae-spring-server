@@ -1,6 +1,9 @@
 package sentosa.sentosaspringserver.global.security.util;
 
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import sentosa.sentosaspringserver.global.entity.MemberRole;
+
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -8,19 +11,18 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 import java.util.List;
 
-@Getter
+@RequiredArgsConstructor
 public class UserDetailsImpl implements UserDetails {
-	private final String userId;
-	private final String role;
+	private final String username;
+	private final MemberRole role;
 
-	public UserDetailsImpl(String userId, String role) {
-		this.userId = userId;
-		this.role = role;
-	}
+	@Getter
+	private final Long userId;
+
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		return List.of(new SimpleGrantedAuthority(role));
+		return List.of(new SimpleGrantedAuthority(role.name()));
 	}
 
 	@Override
@@ -30,7 +32,7 @@ public class UserDetailsImpl implements UserDetails {
 
 	@Override
 	public String getUsername() {
-		return userId;
+		return username;
 	}
 
 	@Override

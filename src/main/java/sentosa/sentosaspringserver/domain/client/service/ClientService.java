@@ -9,6 +9,8 @@ import sentosa.sentosaspringserver.domain.client.entity.Client;
 import sentosa.sentosaspringserver.domain.client.repository.ClientJpaRepository;
 import sentosa.sentosaspringserver.global.entity.Gender;
 import sentosa.sentosaspringserver.global.entity.KakaoUserInfo;
+import sentosa.sentosaspringserver.global.exception.BusinessError;
+import sentosa.sentosaspringserver.global.exception.BusinessException;
 
 @Service
 @RequiredArgsConstructor
@@ -18,9 +20,16 @@ public class ClientService {
 	private final ClientJpaRepository clientJpaRepository;
 
 	@Transactional
-	public Client createClient(String name, Integer age, Gender gender, String telephone, String email,
+	public Client createClient(
+		String name, Integer age, Gender gender, String telephone, String email,
 		String loginId, String loginPassword, String interest, String major,
-		String university) {
+		String university
+	) {
+		// 중복 검증 로직
+		validateEmail(email);
+		validateTelephone(telephone);
+		validateLoginId(loginId);
+
 		Client client = Client.builder()
 			.name(name)
 			.age(age)
@@ -61,5 +70,23 @@ public class ClientService {
 			.build();
 
 		return clientJpaRepository.save(client);
+	}
+
+	public void validateLoginId(String loginId) {
+		if (clientJpaRepository.existsByLoginId(loginId)) {
+			throw new BusinessException(BusinessError.CLIENT_DUPLICATE_LOGIN_ID);
+		}
+	}
+
+	public void validateEmail(String email) {
+		if (clientJpaRepository.existsByEmail(email)) {
+			throw new BusinessException(BusinessError.CLIENT_DUPLICATE_EMAIL);
+		}
+	}
+
+	public void validateTelephone(String telephone) {
+		if (clientJpaRepository.existsByTelephone(telephone)) {
+			throw new BusinessException(BusinessError.CLIENT_DUPLICATE_TELEPHONE);
+		}
 	}
 }

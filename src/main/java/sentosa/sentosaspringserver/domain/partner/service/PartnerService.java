@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
+import sentosa.sentosaspringserver.domain.partner.dto.response.PartnerProfileResponse;
 import sentosa.sentosaspringserver.global.entity.Gender;
 import sentosa.sentosaspringserver.domain.partner.repository.PartnerJpaRepository;
 import sentosa.sentosaspringserver.domain.partner.entity.Partner;
@@ -26,8 +27,9 @@ public class PartnerService {
 		String position, String bio
 	) {
 		// 중복 검증 로직
-
-
+		validateEmail(email);
+		validateLoginId(loginId);
+		validateTelephone(telephone);
 
 		Partner partner = Partner.builder()
 			.name(name)
@@ -51,6 +53,10 @@ public class PartnerService {
 
 	public Optional<Partner> findByEmail(String email) {
 		return partnerJpaRepository.findByEmail(email);
+	}
+
+	public Optional<Partner> findById(Long userId) {
+		return partnerJpaRepository.findById(userId);
 	}
 
 	@Transactional
@@ -80,8 +86,20 @@ public class PartnerService {
 	}
 
 	public void validateEmail(String email) {
-		Optional<Partner> partner = partnerJpaRepository.findByEmail(email);
+		if (partnerJpaRepository.existsByEmail(email)) {
+			throw new BusinessException(BusinessError.PARTNER_DUPLICATE_EMAIL);
+		}
 	}
 
-	public void validate
+	public void validateTelephone(String telephone) {
+		if (partnerJpaRepository.existsByTelephone(telephone)) {
+			throw new BusinessException(BusinessError.PARTNER_DUPLICATE_TELEPHONE);
+		}
+	}
+
+	public PartnerProfileResponse getPartnerProfile(Long userId) {
+		Partner partner = findById(userId)
+			.orElseThrow(() -> new BusinessException(BusinessError.PARTNER_NOT_FOUND));
+		return PartnerProfileResponse.of(partner);
+	}
 }

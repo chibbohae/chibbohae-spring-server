@@ -11,4 +11,10 @@ import sentosa.sentosaspringserver.domain.client.entity.Client;
 public interface ClientJpaRepository extends JpaRepository<Client, Long> {
 	Optional<Client> findByLoginId(String loginId);
 	Optional<Client> findByEmail(String email);
+
+	boolean existsByLoginId(String loginId);
+
+	boolean existsByEmail(String email);
+
+	boolean existsByTelephone(String telephone);
 }
