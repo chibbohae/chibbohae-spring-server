@@ -32,7 +32,7 @@ public class Partner extends BaseEntity {
 	@Comment("파트너 직무")
 	private String position;
 
-	@Lob
+	@Column(columnDefinition = "TEXT")
 	@Comment("파트너 자기소개")
 	private String bio;
 

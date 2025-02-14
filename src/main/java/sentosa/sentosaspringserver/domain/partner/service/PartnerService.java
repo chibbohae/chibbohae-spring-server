@@ -10,6 +10,8 @@ import sentosa.sentosaspringserver.global.entity.Gender;
 import sentosa.sentosaspringserver.domain.partner.repository.PartnerJpaRepository;
 import sentosa.sentosaspringserver.domain.partner.entity.Partner;
 import sentosa.sentosaspringserver.global.entity.KakaoUserInfo;
+import sentosa.sentosaspringserver.global.exception.BusinessError;
+import sentosa.sentosaspringserver.global.exception.BusinessException;
 
 @Service
 @RequiredArgsConstructor
@@ -18,9 +20,15 @@ public class PartnerService {
 	private final PartnerJpaRepository partnerJpaRepository;
 
 	@Transactional
-	public Partner createPartner(String name, Integer age, Gender gender, String telephone, String email,
+	public Partner createPartner(
+		String name, Integer age, Gender gender, String telephone, String email,
 		String loginId, String loginPassword, String company, Integer yearsOfExperience,
-		String position, String bio) {
+		String position, String bio
+	) {
+		// 중복 검증 로직
+
+
+
 		Partner partner = Partner.builder()
 			.name(name)
 			.age(age)
@@ -64,4 +72,16 @@ public class PartnerService {
 
 		return partnerJpaRepository.save(newPartner);
 	}
+
+	public void validateLoginId(String loginId) {
+		if (partnerJpaRepository.existsByLoginId(loginId)) {
+			throw new BusinessException(BusinessError.PARTNER_DUPLICATE_LOGIN_ID);
+		}
+	}
+
+	public void validateEmail(String email) {
+		Optional<Partner> partner = partnerJpaRepository.findByEmail(email);
+	}
+
+	public void validate
 }
