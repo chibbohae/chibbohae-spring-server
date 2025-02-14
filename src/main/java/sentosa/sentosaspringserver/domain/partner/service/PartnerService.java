@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
+import sentosa.sentosaspringserver.domain.partner.dto.request.PartnerProfileUpdateRequestDto;
 import sentosa.sentosaspringserver.domain.partner.dto.response.PartnerProfileResponse;
 import sentosa.sentosaspringserver.global.entity.Gender;
 import sentosa.sentosaspringserver.domain.partner.repository.PartnerJpaRepository;
@@ -100,6 +101,29 @@ public class PartnerService {
 	public PartnerProfileResponse getPartnerProfile(Long userId) {
 		Partner partner = findById(userId)
 			.orElseThrow(() -> new BusinessException(BusinessError.PARTNER_NOT_FOUND));
-		return PartnerProfileResponse.of(partner);
+		return PartnerProfileResponse.from(partner);
+	}
+
+	@Transactional
+	public PartnerProfileResponse updatePartnerProfile(PartnerProfileUpdateRequestDto requestDto, Long userId) {
+		Partner partner = findById(userId)
+			.orElseThrow(() -> new BusinessException(BusinessError.PARTNER_NOT_FOUND));
+
+		// 개별 필드 업데이트
+		if (requestDto.company() != null) {
+			partner.updateCompany(requestDto.company());
+		}
+		if (requestDto.yearsOfExperience() != null) {
+			partner.updateYearsOfExperience(requestDto.yearsOfExperience());
+		}
+		if (requestDto.position() != null) {
+			partner.updatePosition(requestDto.position());
+		}
+		if (requestDto.bio() != null) {
+			partner.updateBio(requestDto.bio());
+		}
+
+		// save() 필요 없음 → JPA가 자동 반영
+		return PartnerProfileResponse.from(partner);
 	}
 }

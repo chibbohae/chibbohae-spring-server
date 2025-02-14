@@ -45,4 +45,20 @@ public class Partner extends BaseEntity {
 		this.position = position;
 		this.bio = bio;
 	}
+
+	public void updateCompany(String company) {
+		this.company = company;
+	}
+
+	public void updateYearsOfExperience(Integer yearsOfExperience) {
+		this.yearsOfExperience = yearsOfExperience;
+	}
+
+	public void updatePosition(String position) {
+		this.position = position;
+	}
+
+	public void updateBio(String bio) {
+		this.bio = bio;
+	}
 }
