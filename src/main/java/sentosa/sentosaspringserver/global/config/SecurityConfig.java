@@ -48,7 +48,7 @@ public class SecurityConfig {
         config.setAllowCredentials(true);
 
         // 허용할 도메인 설정 (개발/운영 환경에 맞게 수정)
-        config.setAllowedOrigins(List.of("http://localhost:3000"));
+        config.setAllowedOrigins(List.of("http://localhost:3000", "http://localhost:8080"));
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(List.of("*"));
 
