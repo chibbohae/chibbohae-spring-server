@@ -1,5 +1,7 @@
 package sentosa.sentosaspringserver.global.config;
 
+import java.util.List;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -9,6 +11,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
 import sentosa.sentosaspringserver.global.security.auth.jwt.JwtAuthenticationFilter;
 import sentosa.sentosaspringserver.global.security.auth.jwt.JwtTokenProvider;
 
@@ -36,6 +41,22 @@ public class SecurityConfig {
 
         return http.build();
     }
+
+    @Bean
+    public CorsConfiguration corsConfigurationSource() {
+        CorsConfiguration config = new CorsConfiguration();
+        config.setAllowCredentials(true);
+
+        // 허용할 도메인 설정 (개발/운영 환경에 맞게 수정)
+        config.setAllowedOrigins(List.of("http://localhost:3000"));
+        config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        config.setAllowedHeaders(List.of("*"));
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", config);
+        return config;
+    }
+
 
     @Bean
     public PasswordEncoder passwordEncoder() {
