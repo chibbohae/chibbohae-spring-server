@@ -34,4 +34,16 @@ public class Client extends BaseEntity {
 		this.major = major;
 		this.university = university;
 	}
+
+	public void updateUniversity(String university) {
+		this.university = university;
+	}
+
+	public void updateMajor(String major) {
+		this.major = major;
+	}
+
+	public void updateInterest(String interest) {
+		this.interest = interest;
+	}
 }

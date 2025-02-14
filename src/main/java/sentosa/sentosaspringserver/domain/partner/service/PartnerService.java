@@ -123,7 +123,6 @@ public class PartnerService {
 			partner.updateBio(requestDto.bio());
 		}
 
-		// save() 필요 없음 → JPA가 자동 반영
 		return PartnerProfileResponse.from(partner);
 	}
 }

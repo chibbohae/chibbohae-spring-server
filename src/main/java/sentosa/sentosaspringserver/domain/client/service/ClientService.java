@@ -5,6 +5,9 @@ import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import sentosa.sentosaspringserver.domain.client.dto.request.ClientProfileUpdateRequestDto;
+import sentosa.sentosaspringserver.domain.client.dto.response.ClientProfileResponseDto;
 import sentosa.sentosaspringserver.domain.client.entity.Client;
 import sentosa.sentosaspringserver.domain.client.repository.ClientJpaRepository;
 import sentosa.sentosaspringserver.global.entity.Gender;
@@ -88,5 +91,31 @@ public class ClientService {
 		if (clientJpaRepository.existsByTelephone(telephone)) {
 			throw new BusinessException(BusinessError.CLIENT_DUPLICATE_TELEPHONE);
 		}
+	}
+
+	public ClientProfileResponseDto getClientProfile(Long userId) {
+		Client client = clientJpaRepository.findById(userId)
+			.orElseThrow(() -> new BusinessException(BusinessError.CLIENT_NOT_FOUND));
+		return ClientProfileResponseDto.from(client);
+	}
+
+	@Transactional
+	public ClientProfileResponseDto updateClientProfile(ClientProfileUpdateRequestDto requestDto, Long userId) {
+		Client client = clientJpaRepository.findById(userId)
+			.orElseThrow(() -> new BusinessException(BusinessError.CLIENT_NOT_FOUND));
+
+		if (requestDto.university() != null) {
+			client.updateUniversity(requestDto.university());
+		}
+
+		if (requestDto.major() != null) {
+			client.updateMajor(requestDto.major());
+		}
+
+		if (requestDto.interest() != null) {
+			client.updateInterest(requestDto.interest());
+		}
+
+		return ClientProfileResponseDto.from(client);
 	}
 }
