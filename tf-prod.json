@@ -1,0 +1,41 @@
+{
+  "family": "sentosa-task",
+  "taskRoleArn": "arn:aws:iam::314146319791:role/ecsTaskExecutionRole",
+  "executionRoleArn": "arn:aws:iam::314146319791:role/ecsTaskExecutionRole",
+  "networkMode": "bridge",
+  "containerDefinitions": [
+    {
+      "name": "sentosa-container",
+      "image": "314146319791.dkr.ecr.ap-northeast-2.amazonaws.com/sentosa-ecr:latest",
+      "cpu": 0,
+      "portMappings": [
+        {
+          "name": "sentosa-container-8080-tcp",
+          "containerPort": 8080,
+          "hostPort": 0,
+          "protocol": "tcp",
+          "appProtocol": "http"
+        }
+      ],
+      "essential": true,
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-group": "/ecs/sentosa-task",
+          "awslogs-region": "ap-northeast-2",
+          "awslogs-create-group": "true",
+          "awslogs-stream-prefix": "ecs",
+          "mode": "non-blocking",
+          "max-buffer-size": "25m"
+        }
+      }
+    }
+  ],
+  "requiresCompatibilities": ["EC2"],
+  "cpu": "512",
+  "memory": "512",
+  "runtimePlatform": {
+    "cpuArchitecture": "ARM64",
+    "operatingSystemFamily": "LINUX"
+  }
+}

@@ -1,0 +1,164 @@
+name: Deploy to Amazon ECS
+
+concurrency:
+  group: ${{ github.ref }}
+  cancel-in-progress: true
+
+on:
+  push:
+    branches: [ "prod" ] # prod 브랜치에 push 시 자동 실행
+
+env:
+  # AWS 리전
+  AWS_REGION: ap-northeast-2
+
+  # "sentosa-ecr" 라는 ECR 리포지토리 이름 사용(본인 계정/리포명 확인)
+  ECR_REPOSITORY: sentosa-ecr
+
+  # ECS 서비스 이름 (AWS ECS 콘솔에서 만든 서비스 이름 확인해서 변경)
+  ECS_SERVICE: sentosa-ecs-service
+
+  # ECS 클러스터 이름 (AWS ECS 콘솔에서 확인 후 적용)
+  ECS_CLUSTER: SentosaCluster
+
+  # 우리가 레포에 추가해둘 Task Definition 파일명
+  ECS_TASK_DEFINITION: tf-prod.json
+
+  # Task Definition에서 설정한 containerDefinitions[].name 값
+  CONTAINER_NAME: sentosa-container
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+
+    steps:
+      # (1) 배포 시작 시 알림 메시지 전송
+      - name: Notify Discord - Deployment Start 🚀
+        run: |
+          curl -H "Content-Type: application/json" \
+          -X POST \
+          -d '{
+                "username": "GitHub Actions",
+                "avatar_url": "https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png",
+                "embeds": [{
+                  "title": ":rocket: Sentosa Spring 배포 시작!",
+                  "description": "[GitHub Actions 실행 로그](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})",
+                  "color": 3066993
+                }]
+              }' ${{ secrets.DISCORD_WEBHOOK_URL }}
+
+      # (2) 소스코드 체크아웃
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # (3) JDK 17 설치
+      - name: Set up JDK 21
+        uses: actions/setup-java@v3
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+
+      # (4) gradlew 실행 권한 부여
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+
+      # (5) Gradle 빌드
+      - name: Build with Gradle
+        run: ./gradlew build
+
+      # (6) 빌드 디렉토리 확인
+      - name: List build directory
+        run: ls -R build/libs
+
+      # (7) AWS 자격증명 설정
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      # (8) Amazon ECR 로그인
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+
+      # (9) Docker 이미지 빌드 & Amazon ECR로 푸시
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Docker build & Push Docker image to Amazon ECR
+        id: build-image
+        uses: docker/build-push-action@v5
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          IMAGE_TAG: ${{ github.sha }}
+        with:
+          context: .
+          push: true
+          tags: ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{ github.sha }}
+          build-args: |
+            SPRING_DATASOURCE_URL=${{ secrets.SPRING_DATASOURCE_URL }}
+            SPRING_DATASOURCE_USERNAME=${{ secrets.SPRING_DATASOURCE_USERNAME }}
+            SPRING_DATASOURCE_PASSWORD=${{ secrets.SPRING_DATASOURCE_PASSWORD }}
+            JWT_SECRET=${{ secrets.JWT_SECRET }}
+            KAKAO_CLIENT_ID=${{ secrets.KAKAO_CLIENT_ID }}
+            KAKAO_REDIRECT_URI_PARTNER=${{ secrets.KAKAO_REDIRECT_URI_PARTNER }}
+            KAKAO_REDIRECT_URI_CLIENT=${{ secrets.KAKAO_REDIRECT_URI_CLIENT }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=min,ignore-error=true
+
+      # (10) 새 이미지 URI를 Task Definition에 반영
+      - name: Fill in the new image ID in the Amazon ECS task definition
+        id: task-def
+        uses: aws-actions/amazon-ecs-render-task-definition@v1
+        with:
+          task-definition: ${{ env.ECS_TASK_DEFINITION }}
+          container-name: ${{ env.CONTAINER_NAME }}
+          image: ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{ github.sha }}
+
+      # (11) 새 Task Definition으로 ECS 서비스 업데이트
+      - name: Deploy Amazon ECS task definition
+        id: ecs-deploy
+        uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+        with:
+          task-definition: ${{ steps.task-def.outputs.task-definition }}
+          service: ${{ env.ECS_SERVICE }}
+          cluster: ${{ env.ECS_CLUSTER }}
+          wait-for-service-stability: true
+          wait-for-minutes: 10
+
+      # (12) 배포 성공/실패 Discord 알림
+      - name: Notify Discord - Deployment Success ✅
+        if: success()
+        run: |
+          curl -H "Content-Type: application/json" \
+          -X POST \
+          -d '{
+                "username": "GitHub Actions",
+                "avatar_url": "https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png",
+                "embeds": [{
+                  "title": ":white_check_mark: Sentosa Spring 배포 성공!",
+                  "description": "[GitHub Actions 실행 로그](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})",
+                  "color": 65280
+                }]
+              }' ${{ secrets.DISCORD_WEBHOOK_URL }}
+
+      - name: Notify Discord - Deployment Failed ❌
+        if: failure()
+        run: |
+          curl -H "Content-Type: application/json" \
+          -X POST \
+          -d '{
+                "username": "GitHub Actions",
+                "avatar_url": "https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png",
+                "embeds": [{
+                  "title": ":x: Spring Spring 배포 실패!",
+                  "description": "[GitHub Actions 실행 로그](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})",
+                  "color": 16711680
+                }]
+              }' ${{ secrets.DISCORD_WEBHOOK_URL }}
