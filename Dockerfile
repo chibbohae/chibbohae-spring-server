@@ -1,5 +1,5 @@
-# Java 21 기반 Amazon Corretto 사용
-FROM amazoncorretto:21
+# Java 21 기반 Amazon Corretto (ARM64 버전)
+FROM amazoncorretto:21-al2-arm64
 
 # 작업 디렉토리 설정
 WORKDIR /app

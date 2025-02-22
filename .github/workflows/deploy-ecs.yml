@@ -100,6 +100,8 @@ jobs:
         with:
           context: .
           push: true
+          # 플랫폼 지정
+          platforms: linux/arm64
           tags: ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{ github.sha }}
           build-args: |
             SPRING_DATASOURCE_URL=${{ secrets.SPRING_DATASOURCE_URL }}
