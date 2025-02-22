@@ -34,16 +34,4 @@ COPY build/libs/sentosa-spring-server-0.0.1-SNAPSHOT.jar /app/app.jar
 ##############################################
 # (4) Spring Boot 실행
 ##############################################
-ENTRYPOINT [
-  "java",
-  "-Duser.timezone=Asia/Seoul",
-  "-Dspring.datasource.url=${SPRING_DATASOURCE_URL}",
-  "-Dspring.datasource.username=${SPRING_DATASOURCE_USERNAME}",
-  "-Dspring.datasource.password=${SPRING_DATASOURCE_PASSWORD}",
-  "-Djwt.secret=${JWT_SECRET}",
-  "-Dkakao.client.id=${KAKAO_CLIENT_ID}",
-  "-Dkakao.redirect.uri.partner=${KAKAO_REDIRECT_URI_PARTNER}",
-  "-Dkakao.redirect.uri.client=${KAKAO_REDIRECT_URI_CLIENT}",
-  "-jar",
-  "/app/app.jar"
-]
+ENTRYPOINT ["java","-Duser.timezone=Asia/Seoul","-Dspring.datasource.url=${SPRING_DATASOURCE_URL}","-Dspring.datasource.username=${SPRING_DATASOURCE_USERNAME}","-Dspring.datasource.password=${SPRING_DATASOURCE_PASSWORD}","-Djwt.secret=${JWT_SECRET}","-Dkakao.client.id=${KAKAO_CLIENT_ID}","-Dkakao.redirect.uri.partner=${KAKAO_REDIRECT_URI_PARTNER}","-Dkakao.redirect.uri.client=${KAKAO_REDIRECT_URI_CLIENT}","-jar","/app/app.jar"]
