@@ -1,5 +1,5 @@
-# Java 21 기반 Amazon Corretto (ARM64 버전)
-FROM amazoncorretto:21-al2-arm64
+# Amazon Corretto 21 + Alpine 3.21, multi-arch (amd64+arm64)
+FROM amazoncorretto:21.0.6-alpine3.21
 
 # 작업 디렉토리 설정
 WORKDIR /app
