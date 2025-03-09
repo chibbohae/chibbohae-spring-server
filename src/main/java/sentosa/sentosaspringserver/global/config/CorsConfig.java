@@ -16,6 +16,7 @@ public class CorsConfig {
 
 		config.setAllowCredentials(true);
 		config.addAllowedOriginPattern("http://localhost:3000"); // 프론트엔드 도메인만 허용
+		config.addAllowedOriginPattern("http://127.0.0.1:3000"); // 프론트엔드 도메인만 허용
 		config.addAllowedHeader("*");
 		config.addAllowedMethod("*"); // 모든 HTTP 메서드 허용
 		source.registerCorsConfiguration("/**", config);
