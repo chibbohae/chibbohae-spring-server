@@ -12,7 +12,7 @@ public class SwaggerConfig {
 	public OpenAPI customOpenAPI() {
 		return new OpenAPI()
 			.info(new Info()
-				.title("dqwdqwdqdwqdw Swagger 문서")
+				.title("Sentosa Srping Swagger 문서")
 				.description("Sentsoa Spring API 명세서입니다.")
 				.version("1.0"));
 	}
