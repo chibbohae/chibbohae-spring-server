@@ -85,4 +85,11 @@ public class AuthService {
 
 		return jwtTokenProvider.createTokenResponse(client.getId(), client.getName(), "ROLE_CLIENT");
 	}
+
+	public void logout(String token) {
+		// JWT의 유효성을 체크하고, 프론트에서 삭제할 수 있도록 안내할 수도 있음.
+		if (!jwtTokenProvider.validateToken(token)) {
+			throw new IllegalArgumentException("유효하지 않은 토큰입니다.");
+		}
+	}
 }
