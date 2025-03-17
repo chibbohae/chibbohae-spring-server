@@ -48,7 +48,7 @@ public class AuthController {
 		return ResponseEntity.ok(authService.clientLogin(loginRequestDto));
 	}
 
-	@Operation(summary = "로그아웃")
+	@Operation(summary = "파트너 및 클라이언트 로그아웃")
 	@PostMapping("/logout")
 	public ResponseEntity<Void> logout(@RequestHeader("Authorization") String token) {
 		authService.logout(token);
